@@ -99,6 +99,22 @@
       "id": "AItX8bG_uIg"
     }
   ],
+  "calculadora": [
+    {
+      "n1": 123,
+      "n2": 123,
+      "op": "soma",
+      "resultado": "246.00",
+      "id": "0MXZXERjXck"
+    },
+    {
+      "n1": 123,
+      "n2": 494,
+      "op": "soma",
+      "resultado": "617.00",
+      "id": "A9-o434Zg_Y"
+    }
+  ],
   "frutas": [],
   "jogos": [],
   "$schema": "./node_modules/json-server/schema.json"
