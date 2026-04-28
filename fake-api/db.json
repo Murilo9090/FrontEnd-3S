@@ -1,0 +1,39 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "nome": "Murilo Silva",
+      "idade": 17,
+      "email": "Murilo@gmail.com"
+    },
+    {
+      "id": "2",
+      "nome": "Samuel",
+      "idade": 17,
+      "email": "Samu@gmail.com"
+    },
+    {
+      "name": "Pedro Enzo",
+      "idade": 17,
+      "email": "Pedro@gmail.com",
+      "id": "OpR14hrVi9k"
+    }
+  ],
+  "Post": [
+    {
+      "id": "1",
+      "Descricao": "Tupac",
+      "imagem": "https://cdn.britannica.com/02/162002-050-02512608/Tupac-Shakur-1993.jpg",
+      "qtdCurtidas": "140mi"
+    },
+    {
+      "Descricao": "MC Ren",
+      "imagem": "https://upload.wikimedia.org/wikipedia/commons/b/bc/MC_Ren_of_NWA_Los_Angeles_1990_photographed_by_Ithaka_Darin_Pappas.jpg",
+      "qtdCurtidas": "120mi",
+      "id": "LeHF95ZEV9A"
+    }
+  ],
+  "frutas": [],
+  "jogos": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}
