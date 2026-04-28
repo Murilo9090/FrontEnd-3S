@@ -33,6 +33,72 @@
       "id": "LeHF95ZEV9A"
     }
   ],
+  "imc": [
+    {
+      "nome": "Eduardo",
+      "altura": 1.67,
+      "peso": 85,
+      "imc": 30.477966223242138,
+      "situacao": "Obesidade Grau I",
+      "id": "6yarE1EtVgQ"
+    },
+    {
+      "nome": "Felipe Silva",
+      "altura": 1.72,
+      "peso": 98,
+      "imc": 33.12601406165495,
+      "situacao": "Obesidade Grau I",
+      "id": "WIt_WE7p4AQ"
+    },
+    {
+      "nome": "Samuel",
+      "altura": 1.73,
+      "peso": 71,
+      "imc": 23.722810651876106,
+      "situacao": "Saudável",
+      "id": "AqkfGiqXWb0"
+    },
+    {
+      "nome": "Murilo",
+      "altura": 1.75,
+      "peso": 54,
+      "imc": 17.632653061224488,
+      "situacao": "Magreza leve",
+      "id": "AvBCEN6Y5TU"
+    },
+    {
+      "nome": "Bruno",
+      "altura": 1.83,
+      "peso": 103,
+      "imc": 30.756367762548894,
+      "situacao": "Obesidade Grau I",
+      "id": "6gUdB-PGFFQ"
+    },
+    {
+      "nome": "Thiago",
+      "altura": 1.92,
+      "peso": 80,
+      "imc": 21.70138888888889,
+      "situacao": "Saudável",
+      "id": "OVsu1WdRBTo"
+    },
+    {
+      "nome": "Figueira",
+      "altura": 1.8,
+      "peso": 72,
+      "imc": 22.22222222222222,
+      "situacao": "Saudável",
+      "id": "nZYekI8sCaM"
+    },
+    {
+      "nome": "Felipe Gonçalves",
+      "altura": 1.7,
+      "peso": 77,
+      "imc": 26.643598615916957,
+      "situacao": "Sobrepeso",
+      "id": "AItX8bG_uIg"
+    }
+  ],
   "frutas": [],
   "jogos": [],
   "$schema": "./node_modules/json-server/schema.json"
