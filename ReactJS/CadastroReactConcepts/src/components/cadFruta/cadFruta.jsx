@@ -23,30 +23,20 @@ function CadFruta() {
         quantidade: 2
     }
 ])
-function Cadastrar(e) {
-    e.preventDefault();
-    alert("Função Cadastrar OK!")
-    setArrFrutas([
-        ...arrFrutas,
-         { nome : fruta, quantidade : quantidade}
-        ])
-
-        limparFormulario()
-
-        return false;
+function Cadastrar(e){
+    e.preventDefault()
+    setArrFrutas([...arrFrutas, {id: Date.now(), nome : fruta, quantidade : quantidade}])
+    limparFormulario()
+return false;
 }
-
 function limparFormulario(){
     setFruta("")
-    setQuantidade(0)
+    setQuantidade()
 }
-
-
     return (
         <section className="sessao-cadastro">
             <h1>Cadastro de Frutas</h1>
-            <form action="" method="post" onSubmit={Cadastrar}>
-
+            <form action="" method="post" onSubmit={Cadastrar} >
             <fieldset className="sessao-cadastro">
                 <input
                     placeholder="Nome da fruta"
@@ -56,7 +46,7 @@ function limparFormulario(){
                     onChange={(e) => {
                         setFruta(e.target.value)
                     }}
-                    />
+                />
                 <br />
                 <input
                     placeholder="Quantidade"
@@ -66,20 +56,20 @@ function limparFormulario(){
                     onChange={(q) => 
                         setQuantidade(q.target.value)
                     }
-                    />
-                <button type="submit" className="cadastro__btn-cadastrar">Cadastrar</button>   
+                />
+                <br />
+                <button className="cadastro__btn-cadastrar" type="submit">Cadastrar</button>
                 <br />
                 <label htmlFor="">{fruta}</label>
             </fieldset>
-                    </form>
-
+</form>
 
 
             <ul className="listagem">
                 {
                     arrFrutas.map((f) => {
                         return (
-                            <li key={f.id}>Fruta: {f.nome} | Quantidade:  {f.quantidade}</li>
+                            <li key={f.id}>Fruta: {f.nome} | Quantidade: {f.quantidade}</li>
                         )
                     })
                 }

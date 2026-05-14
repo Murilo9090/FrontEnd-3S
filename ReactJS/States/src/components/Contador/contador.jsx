@@ -1,4 +1,5 @@
 import {useState} from "react"
+import "./contador.css"
 
 const Contador = () => {
     const[valor, setValor] = useState(0)

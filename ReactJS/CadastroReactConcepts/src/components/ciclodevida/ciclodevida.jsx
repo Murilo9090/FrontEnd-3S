@@ -7,21 +7,11 @@ export default function CicloDeVida(){
     useEffect(() => {
         //quando o componente é montado
         console.log("Componente MONTADO");
-    }, [])
-
-    useEffect(() => {
-        //quando o componente é atualizado
-        console.log("Componente ATUALIZADO");
-    })
-
-    useEffect(() => {
-        //quando o componente é desmontado
         return () => {
-            console.log("Componente DESEMBARCADO");
+            //quando o componente é desmontado
+            console.log("Componente DESMONTADO");
         }
-    }, [])      
-
-
+    }, [contador])
 
 
     return(
