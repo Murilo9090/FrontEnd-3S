@@ -1,222 +1,253 @@
-import Footer from "../../components/footer/Footer";
-import Header from "../../components/header/Header";
-import "./CadastroGenero.css";
-import Cadastro from "../../components/cadastro/Cadastro";
-import Lista from "../../components/lista/Lista";
-import { useEffect, useState } from "react";
-import api from "../../services/services";
-import { isRouteErrorResponse } from "react-router-dom";
+import './CadastroGenero.css'
+import Header from '../../components/header/Header'
+import Footer from '../../components/footer/Footer'
+import Cadastro from '../../components/cadastro/Cadastro'
+import { useEffect, useState } from 'react'
+import api from '../../services/services'
+import Lista from '../../components/lista/Lista'
+import Swal from 'sweetalert2'
+import { Alerta } from '../../components/alerta/Alerta'
 
-// import Swal from "sweetalert2"; // biblioteca de alertas APAGAR
-import { Alerta } from "../../components/alerta/Alerta"; // Sweet Alert Personalizado
+function CadastroGenero(props) {
 
-const CadastroGenero = () => {
-  // states e variáveis
-  const [valor, setValor] = useState("");
-  const [idEditar, setIdEditar] = useState(0);
-
+  const [valor, setValor] = useState("")
   const [editar, setEditar] = useState(false);
-  const [listaGeneros, setListaGeneros] = useState([]);
+  const [itemEditar, setItemEditar] = useState("")
+  const [listaGeneros, setListaGeneros] = useState([])
 
-  // ciclo de vida e funções
-  //
+  //Mudar Editar para true ou false
+
+  const funcEditarFalse = (item) => {
+      setEditar(false)
+    }
+  
+  const funcEditarTrue = (item) => {
+      setEditar(true)
+    }
+
+
+  //GET - UseEffect
+  
+  useEffect(() => {
+    FuncGet()
+    
+  }, [listaGeneros])
+
+  //GET
+  const FuncGet = async () => 
+  {
+    try{
+    const retornoAPI = await api.get('/Genero')
+    const dados = await retornoAPI.data
+    setListaGeneros(dados)
+    }
+    catch(error)
+    {
+      console.log(error);
+    }
+  }
+
   // POST
-  const cadastrarGenero = async (e) => {
-    e.preventDefault();
-
-    // validação dos dados preenchidos
+  const funcCadastro = async () => {
+    
     if (valor.trim().length == 0) {
       Alerta({
-        title: "Cadastro de Gênero",
+        title: "Preencha os valores corretamente",
         text: "Gênero deve ser preenchido antes de cadastrar!",
         icon: "warning",
-        confirmButtonText: "Ok",
-      });
-      return false;
+        tema: props.tema
+      })
+      
+      return false
     }
 
     const objCadastro = {
-      nome: valor,
-    };
+      nome: valor
+    }
 
     try {
-      // Cadastra na api, no endpoint do swagger
-      const retornoAPI = await api.post("/Genero", objCadastro);
+      const retornoAPI = await api.post("/Genero", objCadastro)
+      const dados = await retornoAPI.data
 
       if (retornoAPI.status == 201) {
-        Alerta({
-          title: "Cadastro de Gênero",
-          text: `${objCadastro.nome} foi cadastrado!`,
-          icon: "success",
-          confirmButtonText: "Ok",
-        });
+        setListaGeneros([...listaGeneros, dados])
 
-        // limpar os campos
-        limparFormulario();
-        // chamar o getGeneros
-        getGeneros();
-      } else {
-        Alerta({
-          title: "Cadastro de Gênero",
-          text: "Erro na chamada da API",
-          icon: "error",
-          confirmButtonText: "Ok",
-        });
-        // alert("Houve algum prolema ao cadastrar!");
+
+        Swal.fire({
+        title: "Genero cadastrado com sucesso",
+        text: `O genero ${objCadastro.nome} foi cadastrado com sucesso`,
+        confirmButtonColor:  props.tema == "Dark" ? "rgb(200, 0, 0)" : "rgb(200, 0, 0)",
+        background: props.tema == "Dark" ? "black" :  "white",
+        icon: "success"
+      })
+        limparFormulario()
+      }
+      else
+      {
+        Swal.fire({
+        title: "Problema ao cadastrar o genero",
+        text: `O genero ${objCadastro.nome} não foi cadastrado`,
+        confirmButtonColor:  props.tema == "Dark" ? "rgb(200, 0, 0)" : "rgb(200, 0, 0)",
+        background: props.tema == "Dark" ? "black" :  "white",
+        icon: "error"
+      })
       }
 
-      // chamar o get!
-    } catch (error) {
-      Alerta({
-        title: "Cadastro de Gênero",
-        text: "Erro na chamada da API",
-        icon: "error",
-        confirmButtonText: "Ok",
-      });
-      // console.log(error);
+      //chamar o get!
     }
-  }; //fim função cadastrarGenero
+    catch (error) {
+      Swal.fire({
+        title: "Erro na chamada na API",
+        text: `O genero ${objCadastro.nome} não foi cadastrado`,
+        confirmButtonColor:  props.tema == "Dark" ? "rgb(200, 0, 0)" : "rgb(200, 0, 0)",
+        background: props.tema == "Dark" ? "black" :  "white",
+        icon: "error"
+      })
+      console.log(error)
+    }
+  }
 
-  // Reseta o formulário e esconde o botão
-  const limparFormulario = () => {
-    setValor("");
-    setEditar(false); // reiniciar o editar
-    setIdEditar(0); // zerar o idEditar
-  };
+  //PUT
 
-  // mostrar os dados no formulário
   const preEditar = (item) => {
-    //  jogar os dados no formuário
-    // setIdEditar(item.idGenero);
-    setEditar(true);
-    setIdEditar(item.id);
-    setValor(item.nome);
-    console.log(item);
-  };
 
-  const editarGenero = async (e) => {
-    e.preventDefault();
-    // alert(`Agora sim: Gênero: ${valor} | id: ${idEditar}`);
-    // validar o formulário
-    const objEditar = {
-      nome: valor,
-    };
-    // chamar a api e salvar os dados
-    try {
-      const retornoAPI = await api.put(`/Genero/${idEditar}`, objEditar);
+    console.log(item.nome)
 
-      if (retornoAPI.status == 200) {
-        Alerta({
-          title: "Cadastro de Gênero",
-          text: "Gênero editado com sucesso!",
-          icon: "success",
-        });
-        limparFormulario();
-        getGeneros();
-      } else {
-        Alerta({
-          title: "Cadastro de Gênero",
-          text: "Algum problema aconteceu ao editar",
-          icon: "error",
-        });
-      }
-    } catch (error) {
-      Alerta({
-        title: "Cadastro de Gênero",
-        text: "Erro ao chamar a API",
-        icon: "error",
-      });
-      // console.log(error);
+    setItemEditar(item)
+    setValor(item.nome)
+    setEditar(true)
+  }
+
+
+  const funcEditar = async() =>
+  {
+
+    if (valor.trim().length == 0) {
+      Swal.fire({
+        title: "Preencha os valores corretamente",
+        text: "Gênero deve ser preenchido antes de atualizar!",
+        confirmButtonColor:  props.tema == "Dark" ? "rgb(200, 0, 0)" : "rgb(200, 0, 0)",
+        background: props.tema == "Dark" ? "black" :  "white",
+        icon: "warning"
+        
+      })
+      return false
     }
-  }; //fim função editarGenero
 
-  const excluirGenero = async (item) => {
-    // Validação do formulário
-    const result = await Alerta({
-      title: "Cadastro de Gênero",
-      text: `Deseja realmente apagar ${item.nome} ?`,
+    try{
+    const objCadastro = {
+      nome: valor
+    }
+
+    const retornoAPI = await api.put(`/Genero/${itemEditar.idGenero}`, objCadastro)
+   Swal.fire({
+        title: "Genero atualizado com sucesso",
+        text: `O genero ${objCadastro.nome} foi atualizado com sucesso`,
+        confirmButtonColor:  props.tema == "Dark" ? "rgb(200, 0, 0)" : "rgb(200, 0, 0)",
+        background: props.tema == "Dark" ? "black" :  "white",
+      })
+  }
+  catch(error)  {
+    Swal.fire({
+        title: "Erro na chamada na API",
+        text: `O genero ${objCadastro.nome} não foi atualizado`,
+        confirmButtonColor:  props.tema == "Dark" ? "rgb(200, 0, 0)" : "rgb(200, 0, 0)",
+        background: props.tema == "Dark" ? "black" :  "white",
+      })
+    console.log(error)
+  }         
+  
+}
+
+
+  //DELETE
+  const funcExcluir = async(item) =>
+  {
+
+    const result = await Swal.fire({
+      title: "Excluir Gênero?",
+      text: `Deseja realmente excluir ${item.nome}`,
       icon: "warning",
       showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#d33",
       confirmButtonText: "Confirmar Exclusão",
       cancelButtonText: "Cancelar",
+      background: props.tema == "Dark" ? "black" :  "white",
+    })
 
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-    });
-
-    // Clicou no botão cancelar
-    if (!result.isConfirmed) {
-      return false;
+    if(!result.isConfirmed)
+    {
+      return false
     }
 
-    try {
-      const retornoAPI = await api.delete(`/Genero/${item.id}`);
-      // const retornoAPI = await api.delete(`/Genero/${item.idGenero}`)//pra rodar com api local
-
-      if (retornoAPI.status == 204 || retornoAPI.status == 200) {
-        console.log(retornoAPI);
-        Alerta({
-        title: "Cadastro de Gênero",
-        text: "Apagado com sucesso!",
-        icon: "success",
-        confirmButtonText: "Ok",
-      });
-        getGeneros(); //atualiza a lista
-      }
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    // chamar os dados da api
-    getGeneros();
-  }, []);
-
-  const getGeneros = async () => {
-    try {
-      const retornoAPI = await api.get("/Genero"); //chama a api
-      const dados = retornoAPI.data; //extrai os dados retornados
-      setListaGeneros(dados); //guarda os dados no state (já exibe na lista)
-    } catch (error) {
-      Alerta({
-        title: "Cadastro de Gênero",
-        text: "Erro ao retornar os dados",
-        icon: "error",
-        confirmButtonText: "Ok",
-      });
+    try
+    {
+    const retornoAPI = await api.delete(`/Genero/${item.idGenero}`)
+     Swal.fire({
+        title: "Genero deletado com sucesso",
+        confirmButtonColor:  props.tema == "Dark" ? "rgb(200, 0, 0)" : "rgb(200, 0, 0)",
+        background: props.tema == "Dark" ? "black" :  "white",
+      })
     }
-  };
-  // O jsx
+    catch(error)
+    {
+      Swal.fire({
+        title: "Erro na chamada na API",
+        text: `O genero ${item.nome} não foi excluido`,
+        confirmButtonColor:  props.tema == "Dark" ? "rgb(200, 0, 0)" : "rgb(200, 0, 0)",
+        background: props.tema == "Dark" ? "black" :  "white",
+      })
+      console.log(error)
+    }
+  }
+
+  const limparFormulario = () => {
+    setValor("")
+  }
+
+
+
   return (
     <>
-      <Header />
-      <main>
-        {/* Formulário de cadastrar / editar */}
-        <Cadastro
-          tituloCadastro="Cadastro de Gêneros"
-          visibilidade="none"
-          placeholder="gênero"
-          valor={valor}
-          // função pra cancelar a pré edição
-          cancelarEdicao={limparFormulario}
-          setValor={setValor}
-          funcCadastro={editar ? editarGenero : cadastrarGenero}
-          btnEditar={editar}
-        />
+      <Header 
+      funcTema={props.funcTrocarTema}
+      imagemTema={props.valorImg}
+      />
+      <Cadastro
+        tituloCadastro="Cadastro de Gêneros"
+        visibilidade="none"
+        temadatela={props.tema}
+        
+        placeholder="Genero"
+        valor={valor}
+        funcCadastro={funcCadastro}
+        
+        // função que muda o state
+        setValor={setValor}
+        editar={editar}
+        funcEditar={funcEditar}
+        funcCancelarEdicao={funcEditarFalse}
+        cancelarVisibilidade={editar ? "block" : "none"}
 
-        <Lista
-          tituloLista="Lista de Gêneros"
-          visibilidade="none"
-          //Chama o método para validar:
-          lista={listaGeneros}
-          //Identifica o tipo de lista:
-          tipoLista="genero"
-          funcExcluir={excluirGenero}
-          funcEditar={preEditar}
-        />
-      </main>
+      />
+      <Lista
+        temadatela={props.tema}
+        tituloLista="Lista de Gêneros"
+        visibilidade="none"
+
+        //Chama o método para validar:
+        lista={listaGeneros}
+        //Identifica o tipo de lista:
+        tipoLista="genero"
+
+        funcSetEditar={funcEditarTrue}
+        funcExcluir={funcExcluir}
+        funcEditar={preEditar}
+      />
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default CadastroGenero;
+export default CadastroGenero

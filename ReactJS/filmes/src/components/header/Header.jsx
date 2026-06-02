@@ -1,8 +1,15 @@
 import "./Header.css";
-import Logo from "../../assets/img/logo.svg"
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo from "../../assets/img/logo.svg"
+import Botao from "../botao/Botao";
+import ImagemSol from "../../assets/img/Sun.svg"
+import ImagemLua from "../../assets/img/Moon.svg"
 
-const Header = () => {
+
+const Header = (props) => {
+
+
     return (
         <header>
             <div className="layout_grid cabecalho">
@@ -12,9 +19,10 @@ const Header = () => {
                 </Link>
 
                 <nav className="nav_header">
-                    <Link className="link_header" to="/filmes">Filme</Link>
-                    <Link className="link_header" to="/generos">Gênero</Link>
-                </nav>
+                    <Link className="link_header" to="/Filmes">Filme</Link>
+                    <Link className="link_header" to="/Generos">Gênero</Link>
+                    <button type="button" onClick={props.funcTema}> {(props.imagemTema) == "Sol" ? (<img src={ImagemSol}></img>) : (<img src={ImagemLua}></img>)} </button>
+                </nav>      
             </div>
         </header>
     )

@@ -3,13 +3,24 @@
         header: 75px
         cadastro: 252px
         footer: 40px */
-    min-height: calc(100vh - (75px + 252px + 40px));
+    min-height: calc(100vh  - (75px + 252px + 40px));
 
     display: flex;
     flex-direction: column;
     align-items: center;
 
     padding: 40px 0;
+}
+
+.listagem--Dark
+{
+    background-color: rgb(27, 27, 27);
+    color: white;   
+}
+
+.listagem-Light
+{
+    background-color: rgb(255, 255, 255);
 }
 
 .listagem h1{
@@ -25,9 +36,7 @@
     margin-top: 5px;
 }
 
-.item_lista img{
-    height: 28px;
-}
+
 
 .tabela{
     width: 100%;
@@ -100,5 +109,11 @@
     background: none;
     width: fit-content;
 }
-  
 
+.img_cartaz
+{
+    height: 240px;
+    width: 140px;
+
+    border-radius: 3px;
+}

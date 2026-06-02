@@ -1,17 +1,6 @@
 {
   "Genero": [
-    {
-      "nome": "Comedia",
-      "id": "1Bp0c7ETcRA"
-    },
-    {
-      "nome": "Terror",
-      "id": "CWq__ySS-Yc"
-    },
-    {
-      "nome": "Ação",
-      "id": "xZVdY1aqCLA"
-    }
+
   ],
   "Filme": [],
   "$schema": "./node_modules/json-server/schema.json"
