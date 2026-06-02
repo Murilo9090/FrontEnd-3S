@@ -1,15 +1,18 @@
 import "./produtospage.css";
 import { useEffect, useState } from "react";
+import axios from "axios";
 const Produtos = () => {
     const [listaProdutos, setListaProdutos] = useState([]);
     const [titulo, setTitulo] = useState("");
     const [descricao, setDescricao] = useState("");
-    const [preco, setPreco] = useState(0);
-    const [imagem, setImagem] = useState("hero.png");
+    const [preco, setPreco] = useState();
+    const [imagem, setImagem] = useState("");
+    const [editar, setEditar] = useState(false);
+    const [idEditar, setIdEditar] = useState(null);
     useEffect(() => {
         const getDados = async () => {
             try {
-                const retornoAPI = await fetch("http://localhost:3000/produtos");
+                const retornoAPI = await axios.get("http://localhost:3000/produtos");
                 const dados = await retornoAPI.json();
                 setListaProdutos(dados);
             } catch (error) {
@@ -21,9 +24,9 @@ const Produtos = () => {
     }, []);
 
 
-    const cadastrar = async (e) => {
+    const cadastrarProduto = async (e) => {
         e.preventDefault();
-        if (titulo.trim().length === "" || descricao.trim().length === "" || isNaN(preco)) {
+        if (titulo.trim().length === 0 || descricao.trim().length === 0 || isNaN(preco)) {
             alert("Preencha todos os campos!");
             return;
         }
@@ -34,38 +37,101 @@ const Produtos = () => {
             imagem: imagem,
         };
         console.log(objProduto);
-        const retornoAPI = await fetch("http://localhost:3000/produtos", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-            body: JSON.stringify(objProduto),
-        });
+        try {
+            const retornoAPI = await fetch("http://localhost:3000/produtos", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                body: JSON.stringify(objProduto),
+            });
         const produtoCadastrado = await retornoAPI.json();
         setListaProdutos([...listaProdutos, produtoCadastrado]);
+        limparFormulario();
+        } catch (error) {
+            console.log(error);
+        }
+        
     }
+
+    function limparFormulario() {
+        setTitulo("");
+        setDescricao("");
+        setPreco(0);
+        setImagem("");
+    }
+
     const deletar = async (id) => {
-        const retornoAPI = await fetch(`http://localhost:3000/produtos/${id}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        });
-        const produtoCadastrado = await retornoAPI.json();
+        const retornoAPI = await axios.delete(`http://localhost:3000/produtos/${id}`);
         setListaProdutos(listaProdutos.filter(produto => produto.id !== id));
+        return produto.id != id;
     }
+
+    const editarProduto = async (e) => {
+        e.preventDefault();
+
+        if (
+            titulo.trim().length === 0 ||
+            descricao.trim().length === 0 ||
+            isNaN(preco)
+        ) {
+            alert("Preencha todos os campos!");
+            return;
+        }
+
+        const objProduto = {
+            nome: titulo,
+            descricao: descricao,
+            preco: preco,
+            imagem: imagem,
+        };
+
+        try {
+            const retornoAPI = await fetch(
+                `http://localhost:3000/produtos/${idEditar}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: JSON.stringify(objProduto),
+                }
+            );
+
+            const produtoAtualizado = await retornoAPI.json();
+
+            setListaProdutos(
+                listaProdutos.map((produto) =>
+                    produto.id === idEditar ? produtoAtualizado : produto
+                )
+            );
+
+            setEditar(false);
+            setIdEditar(null);
+            limparFormulario();
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <main className="produtos">
             <h1 className="texto-produto">Cadastro de Produtos</h1>
             <div className="div-cadastro">
-                <form action="" className="cadastro-formulario">
-                    <input className="input-formulario" type="text" placeholder="Nome do Produto" id="titulo" onChange={(e) => { setTitulo(e.target.value) }} />
-                    <input className="input-formulario input-descricao" type="text" placeholder="Descrição" id="descricao" onChange={(e) => { setDescricao(e.target.value) }} />
-                    <input className="input-formulario" type="number" placeholder="Preço" id="preco" onChange={(e) => { setPreco(parseFloat(e.target.value)) }} />
+                <form action="" className="cadastro-formulario" onSubmit={editar ? editarProduto : cadastrarProduto}>
+                    <input className="input-formulario" type="text" placeholder="Nome do Produto" id="titulo" value={titulo} onChange={(e) => { setTitulo(e.target.value) }} />
+                    <input className="input-formulario input-descricao" type="text" placeholder="Descrição" id="descricao" value={descricao} onChange={(e) => { setDescricao(e.target.value) }} />
+                    <input className="input-formulario" type="number" placeholder="Preço" id="preco" value={isNaN(preco) ? 0 : preco} onChange={(e) => { setPreco(parseFloat(e.target.value)) }} />
                     <label className="label_upload" htmlFor="arquivo">Imagem do Produto</label>
-                    <input className="input-formulario btn_upload" id="arquivo" type="file" placeholder="Imagem do Produto" onChange={(e) => { setImagem("/" + e.target.files[0].name) }} />
-                    <button className="btn_cadastrar" onClick={cadastrar}>Cadastrar</button>
+                    <input className="input-formulario btn_upload" id="arquivo" type="file" onChange={(e) => { setImagem("/" + e.target.files[0].name) }} />
+                    {editar && (
+                        <button className="btn_cadastrar" onClick={() => {
+                            setEditar(false)
+                            limparFormulario()
+                        }}>Cancelar</button>
+                    )}
+                    <button className="btn_cadastrar" >Salvar</button>
                 </form>
                 <div className="div-produto">
                     <section className="secao-produto">
@@ -79,7 +145,18 @@ const Produtos = () => {
                                     e.preventDefault()
                                     deletar(produto.id)
                                 }}>
-                                Deletar</button>
+                                    Deletar</button>
+                                <button className="btn_editar" onClick={(e) => {
+                                    e.preventDefault()
+
+                                    setEditar(true)
+                                    setIdEditar(produto.id)
+
+                                    setTitulo(produto.nome)
+                                    setDescricao(produto.descricao)
+                                    setPreco(produto.preco)
+                                    setImagem(produto.imagem)
+                                }}>Editar</button>
                             </article>
                         ))}
                         {/* <article className="card__produto">

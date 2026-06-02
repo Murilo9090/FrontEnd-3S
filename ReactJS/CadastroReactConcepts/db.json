@@ -1,25 +1,11 @@
 {
   "produtos": [
     {
-      "id": "1",
-      "nome": "Bomba",
-      "descricao": "Bomba legal",
-      "preco": 67.67,
-      "imagem": "/hero.png"
-    },
-    {
-      "nome": "asd",
-      "descricao": "asd",
-      "preco": 213,
-      "imagem": "/hero.png",
-      "id": "4YWTL4mB-Z4"
-    },
-    {
-      "nome": "Kaboom",
-      "descricao": "Kablaow",
-      "preco": 119,
-      "imagem": "/hero.png",
-      "id": "cF4Wqsih_DU"
+      "nome": "dsadasdasdsddsada",
+      "descricao": "asdasd4324",
+      "preco": 23243,
+      "imagem": "",
+      "id": "3pC47j-BD38"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

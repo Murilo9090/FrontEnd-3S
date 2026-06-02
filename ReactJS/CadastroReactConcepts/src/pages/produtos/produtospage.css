@@ -64,6 +64,20 @@
     color: white;
 }
 
+.btn_cancelar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 90%;
+    border-radius: 5px;
+    border: black solid 2px;
+    margin: 2px 0% 10px 0%;
+    background-color: #7B50F0;
+    color: white;
+}
+
+
 .label_upload {
     display: flex;
     justify-content: center;
